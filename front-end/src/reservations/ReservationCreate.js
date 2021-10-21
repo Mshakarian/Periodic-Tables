@@ -18,15 +18,23 @@ function ReservationCreate({ setDate }) {
   const [error, setError] = useState(null);
   const [reservation, setReservation] = useState(initialState);
 
-  function changeHandler({ target: { name, value } }) {
-    setReservation((previousRes) => ({
-      ...previousRes,
-      [name]: name === "people" ? +value : value,
-    }));
-  }
+  // function changeHandler({ target: { name, value } }) {
+  //   setReservation((previousRes) => ({
+  //     ...previousRes,
+  //     [name]: name === "people" ? +value : value,
+  //   }));
+  // }
 
   function submitHandler(event) {
     event.preventDefault();
+    let createForm = document.getElementById('createForm');
+    let formData = new FormData(createForm);
+    formData.forEach(({name,value}) =>{
+      setReservation((previousRes) => ({
+        ...previousRes,
+        [name]: name === "people" ? +value : value,
+      }));
+    })
     console.log("reservation", reservation);
     createReservation(reservation)
       .then(() => {
@@ -44,7 +52,7 @@ function ReservationCreate({ setDate }) {
     <main>
       <h1>Create Reservation</h1>
       <ErrorAlert error={error} />
-      <form onSubmit={submitHandler} className="mb-4">
+      <form onSubmit={submitHandler} className="mb-4" id="createForm">
         <div className="mb-3">
           <div className="col-6 form-group">
             <label htmlFor="first_name">First Name</label>
@@ -56,7 +64,7 @@ function ReservationCreate({ setDate }) {
               value={reservation.first_name}
               required={true}
               placeholder="First Name"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <div className="col-6 form-group">
@@ -69,7 +77,7 @@ function ReservationCreate({ setDate }) {
               value={reservation.last_name}
               required={true}
               placeholder="Last Name"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <div className="col-6 form-group">
@@ -83,7 +91,7 @@ function ReservationCreate({ setDate }) {
               value={reservation.mobile_number}
               required={true}
               placeholder="Cell Number"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <div className="col-6 form-group">
@@ -96,7 +104,7 @@ function ReservationCreate({ setDate }) {
               value={reservation.reservation_date}
               required={true}
               placeholder="Reservation Date"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <div className="col-6 form-group">
@@ -109,7 +117,7 @@ function ReservationCreate({ setDate }) {
               value={reservation.reservation_time}
               required={true}
               placeholder="Reservation Time"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <div className="col-6 form-group">
@@ -123,7 +131,7 @@ function ReservationCreate({ setDate }) {
               value={reservation.people}
               required={true}
               placeholder="Party Size"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <button

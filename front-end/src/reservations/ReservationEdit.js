@@ -32,15 +32,23 @@ function ReservationEdit() {
     return () => abortController.abort();
   }
 
-  function changeHandler({ target: { name, value } }) {
-    setReservation({
-      ...reservation,
-      [name]: name === "people" ? Number(value) : value,
-    });
-  }
+  // function changeHandler({ target: { name, value } }) {
+  //   setReservation({
+  //     ...reservation,
+  //     [name]: name === "people" ? Number(value) : value,
+  //   });
+  // }
 
   function submitHandler(event) {
     event.preventDefault();
+    let editForm = document.getElementById('reservation-edit');
+    let formData = new FormData(editForm);
+    formData.forEach(({name,value}) =>{
+      setReservation({
+        ...reservation,
+        [name]: name === "people" ? Number(value) : value,
+      });
+    })
     updateReservation(reservation).then(() => setReservation(reservation));
     console.log("reservation", reservation);
     history.push("/");
@@ -56,8 +64,8 @@ function ReservationEdit() {
       <h1>Edit Reservation</h1>
       <ErrorAlert error={reservationError} />
       <form onSubmit={submitHandler} className="reservation-edit">
-        <fieldset>
-          <div className="form-group">
+        <div className="mb-3">
+          <div className="col-6 form-group">
             <label htmlFor="first_name">First Name</label>
             <input
               type="text"
@@ -67,7 +75,7 @@ function ReservationEdit() {
               value={reservation.first_name}
               required={true}
               placeholder="First Name"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <div className="form-group">
@@ -80,7 +88,7 @@ function ReservationEdit() {
               value={reservation.last_name}
               required={true}
               placeholder="Last Name"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <div className="form-group">
@@ -94,7 +102,7 @@ function ReservationEdit() {
               value={reservation.mobile_number}
               required={true}
               placeholder="Cell Number"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <div className="form-group">
@@ -107,7 +115,7 @@ function ReservationEdit() {
               value={reservation.reservation_date}
               required={true}
               placeholder="Reservation Date"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <div className="form-group">
@@ -120,7 +128,7 @@ function ReservationEdit() {
               value={reservation.reservation_time}
               required={true}
               placeholder="Reservation Time"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <div className="form-group">
@@ -134,7 +142,7 @@ function ReservationEdit() {
               value={reservation.people}
               required={true}
               placeholder="Party Size"
-              onChange={changeHandler}
+              //onChange={changeHandler}
             />
           </div>
           <button
@@ -151,7 +159,7 @@ function ReservationEdit() {
           >
             <span className="oi oi-check" /> Submit
           </button>
-        </fieldset>
+        </div>
       </form>
     </main>
   );

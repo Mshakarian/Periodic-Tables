@@ -35,7 +35,7 @@ function Search() {
         <div className="row mb-3">
           <div className="col-6 form-group">
             <label className="form-label" htmlFor="mobile_number">
-              Phone Number
+              Mobile Number
             </label>
             <input
               className="form-control"

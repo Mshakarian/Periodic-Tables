@@ -117,27 +117,27 @@ function Dashboard({ date, setDate, tables, setTables }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date: {date} </h4>
+        <h4 className="mb-0">{`Reservations for ${date}`}</h4>
       </div>
       <div className="btn-group" role="group" aria-label="Basic example">
         <button
           type="button"
           className="btn btn-secondary"
-          onClick={() => history.push(`/dashBoard?date=${previous(date)}`)}
+          onClick={() => setDate(previous(date))}
         >
           &lt; Previous
         </button>
         <button
           type="button"
           className="btn btn-secondary"
-          onClick={() => history.push(`/dashBoard?date=${today()}`)}
+          onClick={() => setDate(today())}
         >
           Today
         </button>
         <button
           type="button"
           className="btn btn-secondary"
-          onClick={() => history.push(`/dashBoard?date=${next(date)}`)}
+          onClick={() => setDate(next(date))}
         >
           Next &gt;
         </button>

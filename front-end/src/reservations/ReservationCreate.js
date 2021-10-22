@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { createReservation } from "../utils/api";
 
-function ReservationCreate({ setDate }) {
+function ReservationCreate() {
   const initialState = {
     first_name: "",
     last_name: "",
@@ -21,27 +21,25 @@ function ReservationCreate({ setDate }) {
   function changeHandler({ target: { name, value } }) {
     setReservation((previousRes) => ({
       ...previousRes,
-      [name]: name === "people" ? +value : value,
+      [name]: name === "people" ? Number(value) : value,
     }));
   }
 
-  function submitHandler(event) {
+  async function submitHandler(event) {
     event.preventDefault();
-    // let createForm = document.getElementById('createForm');
-    // let formData = new FormData(createForm);
-    // formData.forEach(({name,value}) =>{
-    //   setReservation((previousRes) => ({
-    //     ...previousRes,
-    //     [name]: name === "people" ? +value : value,
-    //   }));
-    // })
+    const abortController = new AbortController();
     console.log("reservation", reservation);
-    createReservation(reservation)
-      .then(() => {
-        setDate(reservation.reservation_date);
-        history.push("/");
-      })
-      .catch(setError);
+    console.log("reservation json", JSON.stringify({ data: reservation }));
+    try {
+      await createReservation(reservation, abortController.signal);
+      history.push(`/dashboard?date=${reservation.reservation_date}`);
+    } catch (error) {
+      if (error.name === "AbortError") {
+        console.log("Aborted");
+      } else {
+        setError(error);
+      }
+    }
   }
 
   function cancelHandler() {

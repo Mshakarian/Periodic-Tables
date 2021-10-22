@@ -32,6 +32,7 @@ headers.append("Content-Type", "application/json");
 async function fetchJson(url, options, onCancel) {
   try {
     const response = await fetch(url, options);
+    console.log("url", url, "options", options);
 
     if (response.status === 204) {
       return null;
@@ -71,6 +72,7 @@ export async function listReservations(params, signal) {
 
 export async function createReservation(reservation, signal) {
   const url = `${API_BASE_URL}/reservations`;
+  reservation.people = Number(reservation.people);
   const options = {
     method: "POST",
     headers,
@@ -78,9 +80,7 @@ export async function createReservation(reservation, signal) {
     signal,
   };
   console.log("reservation", reservation);
-  return await fetchJson(url, options)
-    .then(formatReservationDate)
-    .then(formatReservationTime);
+  return await fetchJson(url, options);
 }
 
 //read reservation
@@ -188,8 +188,8 @@ export async function seatReservation(table_id, reservation_id, signal) {
 export async function finishTable(table_id, signal) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
   const options = {
-    method: "PUT",
-    body: JSON.stringify({ data: { reservation_id: null } }),
+    method: "DELETE",
+    body: JSON.stringify({ data: { table_id } }),
     headers,
     signal,
   };

@@ -10,13 +10,13 @@ import ErrorAlert from "../layout/ErrorAlert";
 
 function ReservationSeat() {
   const history = useHistory();
-  const { reservationId } = useParams;
+  const { reservation_id } = useParams;
 
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(tables[0]);
   const [tablesError, setTablesError] = useState(null);
 
-  useEffect(loadTables, [reservationId]);
+  useEffect(loadTables, [reservation_id]);
 
   function loadTables() {
     const abortController = new AbortController();
@@ -26,7 +26,7 @@ function ReservationSeat() {
         setTables(data);
       })
       .catch(setTablesError);
-    return abortController.abort();
+    return () => abortController.abort();
   }
 
   function cancelHandler() {
@@ -40,8 +40,8 @@ function ReservationSeat() {
 
   function submitHandler(event) {
     event.preventDefault();
-    seatReservation(selectedTable, reservationId)
-      .then(updateReservationStatus(reservationId, SEATED))
+    seatReservation(selectedTable, reservation_id)
+      .then(updateReservationStatus(reservation_id, SEATED))
       .then(loadTables)
       .then(() => history.push("/"))
       .catch(setTablesError);

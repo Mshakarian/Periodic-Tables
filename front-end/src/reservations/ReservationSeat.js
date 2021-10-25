@@ -10,8 +10,8 @@ import ErrorAlert from "../layout/ErrorAlert";
 
 function ReservationSeat() {
   const history = useHistory();
-  const { reservation_id } = useParams;
-
+  let { reservation_id } = useParams;
+  reservation_id = Number(reservation_id);
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(tables[0]);
   const [tablesError, setTablesError] = useState(null);
@@ -58,6 +58,8 @@ function ReservationSeat() {
       return null;
     }
   });
+  console.log("tables: ", tables);
+  console.log("tables rows: ", tablesTableRows);
 
   return (
     <main>

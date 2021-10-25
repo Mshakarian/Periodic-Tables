@@ -1,5 +1,7 @@
 import React from "react";
 import { BOOKED, SEATED, CANCELLED, FINISHED } from "../utils/constants";
+import formatReservationDate from "../utils/format-reservation-date";
+import formatReservationTime from "../utils/format-reservation-time";
 
 function ReservationRow({
   reservation,
@@ -7,6 +9,8 @@ function ReservationRow({
   reservationDone,
   cancelHandler,
 }) {
+  formatReservationDate(reservation);
+  formatReservationTime(reservation);
   return (
     <tr key={reservation.reservation_id}>
       <th scope="row">{reservation.reservation_id}</th>

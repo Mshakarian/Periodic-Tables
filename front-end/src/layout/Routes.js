@@ -41,10 +41,10 @@ function Routes() {
       <Route path="/search">
         <Search />
       </Route>
-      <Route path="/reservations/:reservationId/edit">
+      <Route path="/reservations/:reservation_id/edit">
         <ReservationEdit />
       </Route>
-      <Route path="/reservations/:reservationId/seat">
+      <Route path="/reservations/:reservation_id/seat">
         <ReservationSeat tables={tables} setTables={setTables} />
       </Route>
       <Route path="/tables/new">

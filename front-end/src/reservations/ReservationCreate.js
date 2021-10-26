@@ -72,7 +72,8 @@ function ReservationCreate({ setDate }) {
 
     if (reservationDateTime < todaysDate) {
       foundErrors.push({
-        message: "invalid date: only reservations for future dates can be made",
+        message:
+          "invalid date: This isn't a DeLorean, please select a date in the future",
       });
     }
 

@@ -11,6 +11,7 @@ import { useHistory } from "react-router-dom";
 import { previous, today, next } from "../utils/date-time";
 import { CANCELLED, FINISHED } from "../utils/constants";
 import ReservationsList from "./ReservationsList";
+//import useQuery from "../utils/useQuery";
 
 /**
  * Defines the dashboard page.
@@ -29,7 +30,6 @@ function Dashboard({ date, setDate, tables, setTables }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-
     Promise.all([
       listReservations({ date }, abortController.signal),
       listTables(abortController.signal),

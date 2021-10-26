@@ -12,6 +12,7 @@ function timeDateValidation(req, res, next) {
   const reqDate = new Date(resDateTimeString).getUTCDate();
   console.log("today: ", today);
   console.log("request date: ", reqDate);
+  console.log("weekday: ", weekday);
   if (weekday === 2) {
     return next({
       status: 400,
@@ -49,6 +50,12 @@ async function reservationExists(req, res, next) {
 }
 
 function reservationValidation(req, res, next) {
+  const { data } = req.body;
+  if (!data || data === "")
+    return next({
+      status: 400,
+      message: "Reservation must include all fields",
+    });
   const {
     first_name,
     last_name,
@@ -56,44 +63,37 @@ function reservationValidation(req, res, next) {
     reservation_date,
     reservation_time,
     people,
-  } = req.body.data;
+  } = data;
 
-  if (!first_name || first_name === "") {
+  if (!first_name || first_name === "")
     return next({ status: 400, message: "A 'first_name' must be included" });
-  }
-  if (!last_name || last_name === "") {
+  if (!last_name || last_name === "")
     return next({ status: 400, message: "A 'last_name' must be included" });
-  }
-  if (!mobile_number || mobile_number === "") {
+  if (!mobile_number || mobile_number === "")
     return next({ status: 400, message: "A 'mobile_number' must be included" });
-  }
   if (
     !reservation_date ||
     reservation_date === "" ||
     reservation_date === "not-a-date"
-  ) {
+  )
     return next({
       status: 400,
       message: "A 'reservation_date' must be included",
     });
-  }
   if (
     !reservation_time ||
     reservation_time === "" ||
     reservation_time === "not-a-time"
-  ) {
+  )
     return next({
       status: 400,
       message: "A 'reservation_time' must be included",
     });
-  }
-  if (!people || people === "" || typeof people === "string" || people < 1) {
+  if (!people || people === "" || typeof people !== "number" || people < 1)
     return next({
       status: 400,
-      message: "Party Size must be a number greater than 0",
+      message: "'people' error: Party Size must be a number greater than 0",
     });
-  }
-
   return next();
 }
 
@@ -148,6 +148,7 @@ async function list(req, res) {
 
 async function create(req, res) {
   const { data } = req.body;
+  data.people = Number(data.people);
   const newReservation = await service.create(data);
   res.status(201).json({ data: newReservation });
 }
@@ -179,8 +180,8 @@ async function updateStatus(req, res) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
-    timeDateValidation,
     reservationValidation,
+    timeDateValidation,
     statusIsBooked,
     asyncErrorBoundary(create),
   ],

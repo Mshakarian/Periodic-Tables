@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { createReservation } from "../utils/api";
 
-function ReservationCreate() {
+function ReservationCreate({ setDate }) {
   const initialState = {
     first_name: "",
     last_name: "",
@@ -32,7 +32,8 @@ function ReservationCreate() {
     console.log("reservation json", JSON.stringify({ data: reservation }));
     try {
       await createReservation(reservation, abortController.signal);
-      history.push(`/dashboard?date=${reservation.reservation_date}`);
+      setDate(reservation.reservation_date);
+      return history.push(`/`);
     } catch (error) {
       if (error.name === "AbortError") {
         console.log("Aborted");
@@ -43,7 +44,7 @@ function ReservationCreate() {
   }
 
   function cancelHandler() {
-    history.push("/");
+    return history.push("/");
   }
 
   return (
@@ -140,7 +141,7 @@ function ReservationCreate() {
             <span className="oi o-x" /> Cancel
           </button>
           <button
-            type="button"
+            type="submit"
             className="btn btn-primary"
             onClick={submitHandler}
           >

@@ -15,7 +15,8 @@ function ReservationCreate({ setDate }) {
   };
 
   const history = useHistory();
-  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState([]);
+  const [apiError, setApiError] = useState(null);
   const [reservation, setReservation] = useState(initialState);
 
   function changeHandler({ target: { name, value } }) {
@@ -25,32 +26,94 @@ function ReservationCreate({ setDate }) {
     }));
   }
 
-  async function submitHandler(event) {
+  function submitHandler(event) {
     event.preventDefault();
     const abortController = new AbortController();
+    const foundErrors = [];
     console.log("reservation", reservation);
     console.log("reservation json", JSON.stringify({ data: reservation }));
-    try {
-      await createReservation(reservation, abortController.signal);
-      setDate(reservation.reservation_date);
-      return history.push(`/`);
-    } catch (error) {
-      if (error.name === "AbortError") {
-        console.log("Aborted");
-      } else {
-        setError(error);
-      }
+    if (validateDate(foundErrors) && validateFields(foundErrors)) {
+      createReservation(reservation, abortController.signal)
+        .then(setDate(reservation.reservation_date))
+        .then(() => history.push(`/`))
+        .catch(setApiError);
     }
+    setErrors(foundErrors);
+    return () => abortController.abort();
   }
 
   function cancelHandler() {
-    return history.push("/");
+    history.push("/dashboard");
   }
+
+  /** checks if user has filled out each field in the form */
+  function validateFields(foundErrors) {
+    for (const field in reservation) {
+      if (reservation[field] === "") {
+        foundErrors.push({
+          message: `${field.split("_").join(" ")} cannot be left blank.`,
+        });
+      }
+    }
+
+    return foundErrors.length === 0;
+  }
+  /** checks that the user has entered a date & time that the restaurant is available */
+  function validateDate(foundErrors) {
+    const reservationDateTime = new Date(
+      `${reservation.reservation_date}T${reservation.reservation_time}:00.000`
+    );
+    const todaysDate = new Date();
+    if (reservationDateTime.getDay() === 2) {
+      foundErrors.push({
+        message: "invalid date: restaurant is closed on tuesdays.",
+      });
+    }
+
+    if (reservationDateTime < todaysDate) {
+      foundErrors.push({
+        message: "invalid date: only reservations for future dates can be made",
+      });
+    }
+
+    if (
+      reservationDateTime.getHours() < 10 ||
+      (reservationDateTime.getHours() === 10 &&
+        reservationDateTime.getMinutes() < 30)
+    ) {
+      foundErrors.push({
+        message: "invalid time: restaurant does not open until 10:30am",
+      });
+    } else if (
+      reservationDateTime.getHours() > 22 ||
+      (reservationDateTime.getHours() === 22 &&
+        reservationDateTime.getMinutes() >= 30)
+    ) {
+      foundErrors.push({
+        message: "invalid time: restaurant closes at 10:30pm",
+      });
+    } else if (
+      reservationDateTime.getHours() > 21 ||
+      (reservationDateTime.getHours() === 21 &&
+        reservationDateTime.getMinutes() > 30)
+    ) {
+      foundErrors.push({
+        message:
+          "invalid time: reservation must be made at least an hour before closing",
+      });
+    }
+    return foundErrors.length === 0;
+  }
+
+  const errorsJSX = () => {
+    return errors.map((error, idx) => <ErrorAlert key={idx} error={error} />);
+  };
 
   return (
     <main>
       <h1>Create Reservation</h1>
-      <ErrorAlert error={error} />
+      {errorsJSX()}
+      <ErrorAlert error={apiError} />
       <form onSubmit={submitHandler} className="mb-4" id="createForm">
         <div className="mb-3">
           <div className="col-6 form-group">

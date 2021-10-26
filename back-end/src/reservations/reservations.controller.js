@@ -167,7 +167,7 @@ async function updateReservation(req, res) {
 }
 
 async function updateStatus(req, res) {
-  const { reservation_id } = req.params;
+  let { reservation_id } = req.params;
   const { status } = req.body.data;
   reservation_id = Number(reservation_id);
   console.log("reservation_id: ", reservation_id);

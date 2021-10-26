@@ -70,7 +70,7 @@ function Dashboard({ date, setDate, tables, setTables }) {
     }
   }
 
-  function reservationFinished(reservation_id) {
+  function reservationDone(reservation_id) {
     if (
       window.confirm(
         "Is this reservation finished? WARNING: THIS CANNOT BE UNDONE"
@@ -146,7 +146,7 @@ function Dashboard({ date, setDate, tables, setTables }) {
       {reservations.length > 0 && (
         <ReservationsList
           reservations={reservations}
-          reservationDone={reservationFinished}
+          reservationDone={reservationDone}
           cancelHandler={cancelHandler}
           buttons
         />

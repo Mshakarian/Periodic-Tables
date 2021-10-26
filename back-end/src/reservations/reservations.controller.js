@@ -181,7 +181,7 @@ module.exports = {
   list: asyncErrorBoundary(list),
   create: [
     reservationValidation,
-    timeDateValidation,
+    //timeDateValidation,
     statusIsBooked,
     asyncErrorBoundary(create),
   ],

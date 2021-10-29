@@ -5,12 +5,10 @@ const { validStatus, FINISHED } = require("../constants");
 // MIDDLEWARE
 function timeDateValidation(req, res, next) {
   const { reservation_date, reservation_time } = req.body.data;
-  const weekday = new Date(reservation_date).getDay();
   const today = new Date();
-
-  const resDateTimeString =
-    req.body.data.reservation_date + "T" + req.body.data.reservation_time;
+  const resDateTimeString = `${reservation_date}T${reservation_time}`;
   const reqDate = new Date(resDateTimeString);
+  const weekday =reqDate.getDay();
   console.log("today: ", today);
   console.log("request date: ", reqDate);
   console.log("weekday: ", weekday);

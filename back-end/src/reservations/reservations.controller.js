@@ -9,10 +9,6 @@ function timeDateValidation(req, res, next) {
   const resDateTimeString = `${reservation_date}T${reservation_time}`;
   const reqDate = new Date(resDateTimeString);
   const weekday =reqDate.getDay();
-  console.log("today: ", today);
-  console.log("request date: ", reqDate);
-  console.log("weekday: ", weekday);
-  console.log("today's week day: ", today.getDay());
   if (weekday === 2) {
     return next({
       status: 400,
@@ -37,7 +33,6 @@ function timeDateValidation(req, res, next) {
 
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.params;
-  console.log(req.params);
   const reservations = await service.readReservation(reservation_id);
   if (reservations.length === 1) {
     res.locals.reservation = reservations[0];
@@ -110,7 +105,6 @@ function statusIsBooked(req, res, next) {
 
 function statusValidation(req, res, next) {
   const { status } = req.body.data;
-  const validStatus = ["booked", "seated", "finished", "cancelled"];
   if (validStatus.includes(status)) return next();
   else
     return next({
@@ -121,7 +115,7 @@ function statusValidation(req, res, next) {
 }
 
 async function reservationNotFinished(req, res, next) {
-  if (res.locals.reservation.status === "finished") {
+  if (res.locals.reservation.status === FINISHED) {
     return next({
       status: 400,
       message: "a `finished` status cannot be updated",
@@ -161,7 +155,6 @@ async function readReservation(req, res) {
 
 async function updateReservation(req, res) {
   const { reservation_id } = req.params;
-  console.log(req);
   const updatedReservation = { ...req.body.data };
   const data = await service.update(updatedReservation, reservation_id);
   res.status(200).json({ data });
@@ -171,8 +164,6 @@ async function updateStatus(req, res) {
   let { reservation_id } = req.params;
   const { status } = req.body.data;
   reservation_id = Number(reservation_id);
-  console.log("reservation_id: ", reservation_id);
-  console.log("requested status: ", status);
   const data = await service.updateReservationStatus(status, reservation_id);
   res.status(200).json({ data });
 }

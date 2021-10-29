@@ -1,11 +1,11 @@
 {
-  "name": "starter-restaurant-reservation-back-end",
+  "name": "periodic-tables-back-end",
   "version": "1.0.0",
-  "description": "Starter code for restaurant reservation backend",
+  "description": "Backend for Periodic Tables Restaurant Reservation",
   "main": "src/server.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation",
+    "url": "https://github.com/MShakarian/periodic-tables",
     "directory": "/back-end"
   },
   "scripts": {
@@ -43,5 +43,8 @@
     "jest": "^26.6.3",
     "nodemon": "^2.0.6",
     "supertest": "^6.1.1"
+  },
+  "engines":{
+    "node":"14.x"
   }
 }

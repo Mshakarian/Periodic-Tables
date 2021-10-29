@@ -1,11 +1,11 @@
 {
-  "name": "starter-restaurant-reservation-front-end",
+  "name": "periodic-tables-front-end",
   "version": "1.0.0",
-  "description": "Starter code for restaurant reservation frontend",
+  "description": "Frontend for Period Tables Restaurant Reservation",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation",
+    "url": "https://github.com/MShakarian/Periodic-Tables",
     "directory": "/front-end"
   },
   "private": true,

@@ -4,12 +4,10 @@ import {
   updateReservationStatus,
   listTables,
   finishTable,
-  deleteReservation,
 } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { useHistory } from "react-router-dom";
 import { previous, today, next } from "../utils/date-time";
-import { CANCELLED, FINISHED } from "../utils/constants";
+import { CANCELLED } from "../utils/constants";
 import ReservationsList from "./ReservationsList";
 //import useQuery from "../utils/useQuery";
 
@@ -20,7 +18,6 @@ import ReservationsList from "./ReservationsList";
  * @returns {JSX.Element}
  */
 function Dashboard({ date, setDate, tables, setTables }) {
-  const history = useHistory();
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -70,53 +67,37 @@ function Dashboard({ date, setDate, tables, setTables }) {
     }
   }
 
-  function reservationDone(reservation_id) {
-    if (
-      window.confirm(
-        "Is this reservation finished? WARNING: THIS CANNOT BE UNDONE"
-      )
-    ) {
-      Promise.all([
-        updateReservationStatus(reservation_id, FINISHED),
-        deleteReservation(reservation_id),
-      ])
-        .then(history.push("/"))
-        .then(loadDashboard)
-        .catch(setReservationsError);
-      window.location.reload();
-    }
-  }
-
-  const tablesTable = tables
+  const tablesCards = tables
     .sort((a, b) =>
       a.table_name > b.table_name ? 1 : b.table_name > a.table_name ? -1 : 0
     )
     .map((table) => {
       let tableRes = reservations.find(reservation => reservation.reservation_id === table.reservation_id);
-      console.log("🚀 ~ file: Dashboard.js ~ line 96 ~ .map ~ tableRes", tableRes)
-      let partyName = tableRes ? tableRes.last_name : null;
-      console.log("🚀 ~ file: Dashboard.js ~ line 98 ~ .map ~ partyName", partyName)
-      
+      let partyName = tableRes ? tableRes.last_name : null;      
       return (
-      <tr key={table.table_id}>
-        <td>{table.table_id}</td>
-        <td>{table.table_name}</td>
-        <td>{table.capacity}</td>
-        <td data-table-id-status={table.table_id}>{table.status} - {partyName}</td>
-        <td>
-          {table.status === "occupied" && (
+        <div className="col-lg-4 col-xl-3 m-3 card table-card text-black" key={table.table_id} >
+          <h5 className="table-card-title">Table: {table.table_name}</h5>
+          <div>
+            <h5 data-table-id-status={table.table_id}> Status: 
+             {table.reservation_id ? " Occupied" : " Free"}
+            </h5>
+            <h5>Table Capacity: {table.capacity}</h5>
+            {table.reservation_id ? (
+            <h4>{partyName} Party</h4>
+          ): null}
+          </div>
+          {table.reservation_id ? (
+            <div>
             <button
-              type="button"
-              style={{ backgroundColor: "#211A1E" }}
-              className="btn btn-secondary mr-1 mb-2 btn-sm"
               data-table-id-finish={table.table_id}
+              className="btn btn-success"
               onClick={() => finishTableHandler(table.table_id)}
             >
               Finish
             </button>
-          )}
-        </td>
-      </tr>
+            </div>
+          ) : null}
+          </div>
       )
     });
 
@@ -153,25 +134,11 @@ function Dashboard({ date, setDate, tables, setTables }) {
       {reservations.length > 0 && (
         <ReservationsList
           reservations={reservations}
-          reservationDone={reservationDone}
           cancelHandler={cancelHandler}
           buttons
         />
       )}
-      <div className="table-responsive">
-        <table className="table-no-wrap col-6">
-          <thead>
-            <tr>
-              <th className="border-top-0">#</th>
-              <th className="border-top-0">Table Name</th>
-              <th className="border-top-0">Capacity</th>
-              <th className="border-top-0">Status - Party Name</th>
-              <th className="border-top-0"></th>
-            </tr>
-          </thead>
-          <tbody>{tablesTable}</tbody>
-        </table>
-      </div>
+      <div className="row">{tablesCards}</div>
     </main>
   );
 }

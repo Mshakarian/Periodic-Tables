@@ -68,11 +68,12 @@ function ReservationSeat() {
 
   function submitHandler(event) {
     event.preventDefault();
-    console.log("submit handler, reservation ID: ", reservation.reservation_id);
+    const abortController = new AbortController();
+    console.log("submit handler, reservation ID: ", reservation_id);
     console.log("submit handler selected table: ", selectedTable);
-    seatReservation(reservation.reservation_id, selectedTable)
-      .then(updateReservationStatus(reservation.reservation_id, SEATED))
-      .then(() => history.push("/"));
+    seatReservation(reservation_id, selectedTable,abortController.signal)
+      .then(updateReservationStatus(reservation_id, SEATED,abortController.signal))
+      .then(() => history.push(`/dashboard?date=${reservation.reservation_date}`)).catch(setTablesError);
   }
 
   const tablesTableRows = tables.map((table) => {
@@ -86,13 +87,12 @@ function ReservationSeat() {
       return null;
     }
   });
-  console.log("tables: ", tables);
-  console.log("tables rows: ", tablesTableRows);
 
   return (
     <main>
       <h1 className="mb-3">Seat Reservation</h1>
-      <ErrorAlert error={(tablesError, reservationError)} />
+      <ErrorAlert error={reservationError} />
+      <ErrorAlert error={tablesError} />
       <ReservationCard reservation={reservation} />
       <form onSubmit={submitHandler} className="mb-4">
         <div className="row mb-3">

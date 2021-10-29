@@ -16,7 +16,7 @@ function TableCreate() {
   const [error, setError] = useState(null);
 
   function cancelHandler() {
-    history.push("/");
+    history.goBack();
   }
 
   function submitHandler(event) {

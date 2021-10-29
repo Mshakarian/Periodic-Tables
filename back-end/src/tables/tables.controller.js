@@ -34,6 +34,8 @@ async function resExists(req, res, next) {
   reservation_id = Number(reservation_id);
   const reservations = await reservationService.readReservation(reservation_id);
   const reservation = reservations[0];
+  console.log("🚀 ~ file: tables.controller.js ~ line 37 ~ resExists ~ reservation", reservation)
+  
   if (reservation) {
     res.locals.reservation = reservation;
     return next();
@@ -66,7 +68,10 @@ function tableHasCapacity(req, res, next) {
 
 function partyFitsTable(req, res, next) {
   let { people } = res.locals.reservation;
+  console.log("🚀 ~ file: tables.controller.js ~ line 71 ~ partyFitsTable ~ people", people)
   let { capacity } = res.locals.table;
+  console.log("🚀 ~ file: tables.controller.js ~ line 73 ~ partyFitsTable ~ capacity", capacity)
+  
   if (Number(people) > Number(capacity))
     return next({
       status: 400,

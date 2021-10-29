@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { BOOKED, FINISHED, CANCELLED, SEATED } from "../utils/constants";
+import { BOOKED } from "../utils/constants";
 
 function ReservationCard(props) {
   return (
@@ -25,7 +25,7 @@ function ReservationCard(props) {
               className="btn btn-secondary mr-1 mb-2 btn-sm"
             >
               <Link
-                to={`/reservations/${props.reservation.reservation_id}/edit`}
+                href={`/reservations/${props.reservation.reservation_id}/edit`}
                 style={{
                   textDecoration: "none",
                   color: "white",
@@ -35,7 +35,7 @@ function ReservationCard(props) {
               </Link>
             </button>
           )}
-          {props.reservation.status !== CANCELLED && (
+          {props.reservation.status === BOOKED && (
             <button
               type="button"
               style={{
@@ -60,6 +60,7 @@ function ReservationCard(props) {
             >
               <Link
                 to={`/reservations/${props.reservation.reservation_id}/seat`}
+                href={`/reservations/${props.reservation.reservation_id}/seat`}
                 style={{
                   textDecoration: "none",
                   color: "white",
@@ -67,22 +68,6 @@ function ReservationCard(props) {
               >
                 Seat
               </Link>
-            </button>
-          )}
-          {(props.reservation.status === SEATED ||
-            props.reservation.status === CANCELLED ||
-            props.reservation.status === FINISHED) && (
-            <button
-              type="button"
-              style={{
-                backgroundColor: "#211A1E",
-              }}
-              className="btn btn-secondary mr-1 mb-2 btn-sm"
-              onClick={() =>
-                props.reservationDone(props.reservation.reservation_id)
-              }
-            >
-              Done
             </button>
           )}
         </div>

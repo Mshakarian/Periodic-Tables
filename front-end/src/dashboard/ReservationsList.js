@@ -4,7 +4,7 @@ import formatReservationDate from "../utils/format-reservation-date";
 import formatReservationTime from "../utils/format-reservation-time";
 import ReservationCard from "./ReservationCard";
 
-function ReservationsList({ reservations, reservationDone, cancelHandler }) {
+function ReservationsList({ reservations, cancelHandler }) {
   const reservationsList = reservations
     .sort((a, b) =>
       a.reservation_time > b.reservation_time
@@ -31,7 +31,6 @@ function ReservationsList({ reservations, reservationDone, cancelHandler }) {
         <ReservationCard
           key={reservation.reservation_id}
           reservation={reservation}
-          reservationDone={reservationDone}
           cancelHandler={cancelHandler}
           buttons
         />

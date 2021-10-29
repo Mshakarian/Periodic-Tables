@@ -20,11 +20,15 @@ function update(reservation_id, table_id) {
     .then(() =>
       knex("tables")
         .where({ table_id })
-        .update({ reservation_id }, [
+        .update({ 
+          reservation_id: reservation_id,
+          status: "occupied"
+         }, [
           "table_id",
           "table_name",
           "capacity",
           "reservation_id",
+          "status",
         ])
         .then((result) => result[0].status)
     );
@@ -37,8 +41,9 @@ function finishTable(reservation_id, table_id) {
     .returning("*")
     .then(() => {
       return knex("tables")
-        .where({ tabnle_id })
-        .update({ reservation_id: null });
+        .where({ table_id })
+        .update({ reservation_id: null,
+        status: "free" });
     });
 }
 

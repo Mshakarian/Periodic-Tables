@@ -6,13 +6,15 @@ const { validStatus, FINISHED } = require("../constants");
 function timeDateValidation(req, res, next) {
   const { reservation_date, reservation_time } = req.body.data;
   const weekday = new Date(reservation_date).getDay();
-  const today = new Date().getUTCDate();
+  const today = new Date();
+
   const resDateTimeString =
     req.body.data.reservation_date + "T" + req.body.data.reservation_time;
-  const reqDate = new Date(resDateTimeString).getUTCDate();
+  const reqDate = new Date(resDateTimeString);
   console.log("today: ", today);
   console.log("request date: ", reqDate);
   console.log("weekday: ", weekday);
+  console.log("today's week day: ", today.getDay());
   if (weekday === 2) {
     return next({
       status: 400,
@@ -20,7 +22,7 @@ function timeDateValidation(req, res, next) {
         "This Restaurant is closed on Tuesdays, please choose a different day.",
     });
   }
-  if (today > reqDate) {
+  if (today.getTime() > reqDate.getTime()) {
     return next({
       status: 400,
       message: "This isn't a DeLorean, please select a date in the future.",
@@ -181,7 +183,7 @@ module.exports = {
   list: asyncErrorBoundary(list),
   create: [
     reservationValidation,
-    //timeDateValidation,
+    timeDateValidation,
     statusIsBooked,
     asyncErrorBoundary(create),
   ],

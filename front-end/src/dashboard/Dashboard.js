@@ -91,12 +91,18 @@ function Dashboard({ date, setDate, tables, setTables }) {
     .sort((a, b) =>
       a.table_name > b.table_name ? 1 : b.table_name > a.table_name ? -1 : 0
     )
-    .map((table) => (
+    .map((table) => {
+      let tableRes = reservations.find(reservation => reservation.reservation_id === table.reservation_id);
+      console.log("🚀 ~ file: Dashboard.js ~ line 96 ~ .map ~ tableRes", tableRes)
+      let partyName = tableRes ? tableRes.last_name : null;
+      console.log("🚀 ~ file: Dashboard.js ~ line 98 ~ .map ~ partyName", partyName)
+      
+      return (
       <tr key={table.table_id}>
         <td>{table.table_id}</td>
         <td>{table.table_name}</td>
         <td>{table.capacity}</td>
-        <td data-table-id-status={table.table_id}>{table.status}</td>
+        <td data-table-id-status={table.table_id}>{table.status} - {partyName}</td>
         <td>
           {table.status === "occupied" && (
             <button
@@ -111,7 +117,8 @@ function Dashboard({ date, setDate, tables, setTables }) {
           )}
         </td>
       </tr>
-    ));
+      )
+    });
 
   return (
     <main>
@@ -152,13 +159,13 @@ function Dashboard({ date, setDate, tables, setTables }) {
         />
       )}
       <div className="table-responsive">
-        <table className="table-no-wrap">
+        <table className="table-no-wrap col-6">
           <thead>
             <tr>
               <th className="border-top-0">#</th>
               <th className="border-top-0">Table Name</th>
               <th className="border-top-0">Capacity</th>
-              <th className="border-top-0">Status</th>
+              <th className="border-top-0">Status - Party Name</th>
               <th className="border-top-0"></th>
             </tr>
           </thead>

@@ -76,8 +76,8 @@ function ReservationSeat() {
       .then(() => history.push(`/dashboard?date=${reservation.reservation_date}`)).catch(setTablesError);
   }
 
-  const tablesTableRows = tables.map((table) => {
-    if (table.status === FREE) {
+  const tablesOptions = tables.map((table) => {
+    if (table.status === FREE && table.capacity >= Number(reservation.people)) {
       return (
         <option value={table.table_id} key={table.table_id}>
           {table.table_name} - {table.capacity}
@@ -108,7 +108,7 @@ function ReservationSeat() {
               required={true}
             >
               <option>Select a table</option>
-              {tablesTableRows}
+              {tablesOptions}
             </select>
           </div>
         </div>

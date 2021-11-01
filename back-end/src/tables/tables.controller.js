@@ -4,7 +4,6 @@ const { OCCUPIED, FREE, FINISHED, SEATED } = require("../constants");
 const reservationService = require("../reservations/reservations.service");
 
 //MIDDLEWARE
-const tableDefinition = ["table_name", "capacity"];
 
 function bodyHasData(req, res, next) {
   const data = req.body.data;
@@ -15,7 +14,7 @@ function bodyHasData(req, res, next) {
 function bodyHasResId(req, res, next) {
   const { reservation_id } = req.body.data;
   if (reservation_id) return next();
-  next({ status: 400, message: "Reservation Id is required" });
+  next({ status: 400, message: "reservation_id is required" });
 }
 
 async function tableExists(req, res, next) {
@@ -32,8 +31,7 @@ async function tableExists(req, res, next) {
 async function resExists(req, res, next) {
   let { reservation_id } = req.body.data;
   reservation_id = Number(reservation_id);
-  const reservations = await reservationService.readReservation(reservation_id);
-  const reservation = reservations[0];
+  const reservation = await reservationService.readReservation(reservation_id);
   console.log("🚀 ~ file: tables.controller.js ~ line 37 ~ resExists ~ reservation", reservation)
   
   if (reservation) {
@@ -52,7 +50,7 @@ function tableHasName(req, res, next) {
   else
     return next({
       status: 400,
-      message: "Table Name must be 2 characters or more",
+      message: "table_name must be 2 characters or more",
     });
 }
 
@@ -75,7 +73,7 @@ function partyFitsTable(req, res, next) {
   if (Number(people) > Number(capacity))
     return next({
       status: 400,
-      message: "Table is too small to fit this reservation size",
+      message: "Table capacity is too small to fit this reservation size",
     });
   next();
 }
@@ -112,7 +110,7 @@ function reservationSeatedAlready(req, res, next) {
 
 async function create(req, res) {
   const newTable = await service.create(req.body.data);
-  res.status(201).json({ data: newTable });
+  res.status(201).json({ data: newTable[0] });
 }
 
 async function list(req, res) {

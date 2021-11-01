@@ -6,7 +6,7 @@ import {
   updateReservationStatus,
   readReservation,
 } from "../utils/api";
-import { SEATED, FREE } from "../utils/constants";
+import { SEATED, OCCUPIED } from "../utils/constants";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationCard from "../dashboard/ReservationCard";
 
@@ -69,15 +69,13 @@ function ReservationSeat() {
   function submitHandler(event) {
     event.preventDefault();
     const abortController = new AbortController();
-    console.log("submit handler, reservation ID: ", reservation_id);
-    console.log("submit handler selected table: ", selectedTable);
     seatReservation(reservation_id, selectedTable,abortController.signal)
       .then(updateReservationStatus(reservation_id, SEATED,abortController.signal))
       .then(() => history.push(`/dashboard?date=${reservation.reservation_date}`)).catch(setTablesError);
   }
 
   const tablesOptions = tables.map((table) => {
-    if (table.status === FREE && table.capacity >= Number(reservation.people)) {
+    if (table.status !== OCCUPIED) {
       return (
         <option value={table.table_id} key={table.table_id}>
           {table.table_name} - {table.capacity}

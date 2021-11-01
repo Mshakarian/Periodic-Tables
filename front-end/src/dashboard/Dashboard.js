@@ -9,7 +9,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time";
 import { CANCELLED } from "../utils/constants";
 import ReservationsList from "./ReservationsList";
-//import useQuery from "../utils/useQuery";
+import useQuery from "../utils/useQuery";
 
 /**
  * Defines the dashboard page.
@@ -20,6 +20,12 @@ import ReservationsList from "./ReservationsList";
 function Dashboard({ date, setDate, tables, setTables }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const query = useQuery();
+  let queryDate = query.get("date");
+
+  if (queryDate){
+    setDate(queryDate);
+  }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(loadDashboard, [date]);

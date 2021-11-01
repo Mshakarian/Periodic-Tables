@@ -30,10 +30,7 @@ function create(newReservation) {
 }
 
 function readReservation(reservation_id) {
-  console.log(reservation_id);
-  reservation_id = Number(reservation_id);
-  console.log(reservation_id);
-  return knex("reservations").select("*").where({ reservation_id });
+  return knex("reservations").select("*").where({ reservation_id }).first();
 }
 
 function update(updatedReservation, reservation_id) {

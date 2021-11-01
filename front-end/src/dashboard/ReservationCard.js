@@ -14,7 +14,7 @@ function ReservationCard(props) {
       <h5>Time: {reservation_time}</h5>
       <h5>Party Size: {people}</h5>
       <br />
-      <h5>Status: {status}</h5>
+      <h5>Status: {status} </h5>
       {props.buttons && (
         <div>
           {status === BOOKED && (

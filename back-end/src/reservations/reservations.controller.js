@@ -32,10 +32,11 @@ function timeDateValidation(req, res, next) {
 }
 
 async function reservationExists(req, res, next) {
-  const { reservation_id } = req.params;
-  const reservations = await service.readReservation(reservation_id);
-  if (reservations.length === 1) {
-    res.locals.reservation = reservations[0];
+  let { reservation_id } = req.params;
+  reservation_id = Number(reservation_id);
+  const reservation = await service.readReservation(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
     return next();
   }
   return next({
@@ -147,14 +148,14 @@ async function create(req, res) {
   res.status(201).json({ data: newReservation });
 }
 
-async function readReservation(req, res) {
-  const { reservation_id } = res.locals.reservation;
-  const data = await service.readReservation(reservation_id);
-  res.json({ data });
+function readReservation(req, res) {
+  let reservation = res.locals.reservation;
+  res.status(200).json({ data: reservation });
 }
 
 async function updateReservation(req, res) {
-  const { reservation_id } = req.params;
+  let { reservation_id } = req.params;
+  reservation_id = Number(reservation_id);
   const updatedReservation = { ...req.body.data };
   const data = await service.update(updatedReservation, reservation_id);
   res.status(200).json({ data });
@@ -178,7 +179,7 @@ module.exports = {
   ],
   read: [
     asyncErrorBoundary(reservationExists),
-    asyncErrorBoundary(readReservation),
+    readReservation,
   ],
   update: [
     asyncErrorBoundary(reservationExists),

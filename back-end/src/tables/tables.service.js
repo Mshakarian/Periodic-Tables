@@ -5,7 +5,7 @@ function list() {
 }
 
 function create(newTable) {
-  return knex("tables").insert(newTable).returning("*");
+  return knex("tables").insert(newTable).returning(["capacity","table_name"]);
 }
 
 function read(table_id) {

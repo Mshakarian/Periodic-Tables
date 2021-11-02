@@ -26,6 +26,7 @@ function ReservationCard(props) {
               className="btn btn-secondary mr-1 mb-2 btn-sm"
             >
               <Link
+                to={`/reservations/${reservation_id}/edit`}
                 href={`/reservations/${reservation_id}/edit`}
                 style={{
                   textDecoration: "none",
@@ -36,7 +37,7 @@ function ReservationCard(props) {
               </Link>
             </button>
           )}
-          {props.reservation.status === BOOKED && (
+          {status === BOOKED && (
             <button
               type="button"
               style={{
@@ -51,7 +52,7 @@ function ReservationCard(props) {
               Cancel
             </button>
           )}
-          {props.reservation.status === BOOKED && (
+          {status === BOOKED && (
             <button
               type="button"
               style={{

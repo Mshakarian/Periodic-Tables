@@ -32,8 +32,7 @@ function timeDateValidation(req, res, next) {
 }
 
 async function reservationExists(req, res, next) {
-  let { reservation_id } = req.params;
-  reservation_id = Number(reservation_id);
+  const { reservation_id } = req.params;
   const reservation = await service.readReservation(reservation_id);
   if (reservation) {
     res.locals.reservation = reservation;
@@ -149,8 +148,7 @@ async function create(req, res) {
 }
 
 function readReservation(req, res) {
-  let reservation = res.locals.reservation;
-  res.status(200).json({ data: reservation });
+  res.json({ data: res.locals.reservation });
 }
 
 async function updateReservation(req, res) {

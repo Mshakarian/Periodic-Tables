@@ -1,11 +1,12 @@
 const knex = require("../db/connection");
+const tableName = "reservations";
 
 function list() {
-  return knex("reservations").select("*").whereNot({ status: "finished" });
+  return knex(tableName).select("*").whereNot("status", ["finished","cancelled"]).orderBy("reservation_time");
 }
 
 function listByDate(reservation_date) {
-  return knex("reservations")
+  return knex(tableName)
     .select("*")
     .where({ reservation_date })
     .whereNot({ status: "finished" })
@@ -13,7 +14,7 @@ function listByDate(reservation_date) {
 }
 
 function listByPhone(mobile_number) {
-  return knex("reservations")
+  return knex(tableName)
     .whereRaw(
       "translate(mobile_number, '() -', '') like ?",
       `%${mobile_number.replace(/\D/g, "")}%`
@@ -23,19 +24,19 @@ function listByPhone(mobile_number) {
 }
 
 function create(newReservation) {
-  return knex("reservations")
+  return knex(tableName)
     .insert(newReservation)
     .returning("*")
     .then((newReservation) => newReservation[0]);
 }
 
 function readReservation(reservation_id) {
-  return knex("reservations").select("*").where({ reservation_id }).first();
+  return knex(tableName).select("*").where({ reservation_id }).first();
 }
 
 function update(updatedReservation, reservation_id) {
   reservation_id = Number(reservation_id);
-  return knex("reservations")
+  return knex(tableName)
     .where({ reservation_id })
     .update({ ...updatedReservation })
     .returning("*")
@@ -43,7 +44,7 @@ function update(updatedReservation, reservation_id) {
 }
 
 function updateReservationStatus(status, reservation_id) {
-  return knex("reservations")
+  return knex(tableName)
     .where({ reservation_id })
     .update({ status: status })
     .returning("*")

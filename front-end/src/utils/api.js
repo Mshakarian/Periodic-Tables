@@ -79,33 +79,19 @@ export async function createReservation(reservation, signal) {
     body: JSON.stringify({ data: reservation }),
     signal,
   };
-  console.log("reservation", reservation);
-  const today = new Date().getUTCDate();
-  const resDateTimeString =
-    reservation.reservation_date + "T" + reservation.reservation_time;
-  const reqDate = new Date(resDateTimeString).getUTCDate();
-  console.log("res date time string: ", resDateTimeString);
-  console.log("reservation_date: ", reservation.reservation_date);
-  console.log("reservation_time: ", reservation.reservation_time);
-  console.log("today: ", today);
-  console.log("request date: ", reqDate);
-  console.log(today > reqDate);
   return await fetchJson(url, options);
 }
 
 //read reservation
 
 export async function readReservation(reservation_id, signal) {
-  console.log(reservation_id);
   const url = `${API_BASE_URL}/reservations/${reservation_id}`;
   const options = {
     method: "GET",
     headers,
     signal,
   };
-
   return await fetchJson(url, options)
-    .then((data) => data[0])
     .then(formatReservationDate)
     .then(formatReservationTime);
 }

@@ -85,7 +85,7 @@ function Dashboard({ date, setDate, tables, setTables }) {
           <h5 className="table-card-title">Table: {table.table_name}</h5>
           <div>
             <h5 data-table-id-status={table.table_id}> Status: 
-             {table.reservation_id ? " Occupied" : " Free"}
+             {table.reservation_id ? " occupied" : " free"}
             </h5>
             <h5>Table Capacity: {table.capacity}</h5>
             {table.reservation_id ? (

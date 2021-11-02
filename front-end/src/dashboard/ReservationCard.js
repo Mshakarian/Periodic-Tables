@@ -2,7 +2,15 @@ import { Link } from "react-router-dom";
 import { BOOKED } from "../utils/constants";
 
 function ReservationCard(props) {
-  const {reservation_id,first_name,last_name,mobile_number,reservation_time,reservation_date,people,status} = props.reservation;
+  const {
+    reservation_id,
+    first_name,
+    last_name,
+    mobile_number,
+    reservation_time,
+    reservation_date,
+    people,
+    status} = props.reservation;
   return (
     <div className="col-lg-4 col-xl-3 m-3 reservation-card text-black">
       <h3>{reservation_date}</h3>

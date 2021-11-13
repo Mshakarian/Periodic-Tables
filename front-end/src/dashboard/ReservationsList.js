@@ -5,6 +5,15 @@ import formatReservationTime from "../utils/format-reservation-time";
 import ReservationCard from "./ReservationCard";
 
 function ReservationsList({ reservations, cancelHandler }) {
+  if (reservations === undefined || reservations.length < 1) {
+    return (
+      <div>
+        <h3>No Reservations Found</h3>
+        <br />
+        <br />
+      </div>
+    );
+  }
   const reservationsList = reservations
     .sort((a, b) =>
       a.reservation_time > b.reservation_time
@@ -36,15 +45,7 @@ function ReservationsList({ reservations, cancelHandler }) {
         />
       );
     });
-  if (reservations.length < 1) {
-    return (
-      <div>
-        <h3>No Reservations Found</h3>
-        <br />
-        <br />
-      </div>
-    );
-  }
+
   return <div className="row res-card-container">{reservationsList}</div>;
 }
 

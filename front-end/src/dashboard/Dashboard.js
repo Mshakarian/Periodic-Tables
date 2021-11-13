@@ -73,7 +73,9 @@ function Dashboard({ date, setDate, tables, setTables }) {
     }
   }
 
-  const tablesCards = tables
+  const tablesCards = () => {
+    if(tables !== undefined){
+    return tables
     .sort((a, b) =>
       a.table_name > b.table_name ? 1 : b.table_name > a.table_name ? -1 : 0
     )
@@ -105,7 +107,7 @@ function Dashboard({ date, setDate, tables, setTables }) {
           ) : null}
           </div>
       )
-    });
+    })}};
 
   return (
     <main>
@@ -144,7 +146,7 @@ function Dashboard({ date, setDate, tables, setTables }) {
           buttons
         />
       )}
-      <div className="row">{tablesCards}</div>
+      <div className="row">{tablesCards()}</div>
     </main>
   );
 }

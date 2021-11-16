@@ -57,14 +57,7 @@ function Search() {
           Find
         </button>
       </form>
-      {reservations.length > 0 && (
-        <ReservationsList
-          reservations={reservations}
-          reservationDone={() => {}}
-          cancelHandler={() => {}}
-          buttons={false}
-        />
-      )}
+        <ReservationsList reservations={reservations} />
     </main>
   );
 }

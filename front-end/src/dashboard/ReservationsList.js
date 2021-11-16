@@ -4,12 +4,13 @@ import formatReservationDate from "../utils/format-reservation-date";
 import formatReservationTime from "../utils/format-reservation-time";
 import ReservationCard from "./ReservationCard";
 
-function ReservationsList({ reservations, cancelHandler }) {
-  if (reservations === undefined || reservations.length < 1) {
+function ReservationsList({ reservations, cancelHandler, }) {
+  if (reservations === undefined || reservations.length === 0) {
+
     return (
       <div>
-        <h3>No Reservations Found</h3>
         <br />
+        <h3>No Reservations Found</h3>
         <br />
       </div>
     );

@@ -131,20 +131,20 @@ export async function updateReservation(reservation, signal) {
 
 //delete reservation
 
-export async function deleteReservation(reservation_id, signal) {
-  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
-  const options = {
-    method: "PUT",
-    headers,
-    body: JSON.stringify({
-      data: {
-        status: "cancelled",
-      },
-    }),
-    signal,
-  };
-  return await fetchJson(url, options);
-}
+// export async function deleteReservation(reservation_id, signal) {
+//   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+//   const options = {
+//     method: "PUT",
+//     headers,
+//     body: JSON.stringify({
+//       data: {
+//         status: "cancelled",
+//       },
+//     }),
+//     signal,
+//   };
+//   return await fetchJson(url, options);
+// }
 
 //create new table
 

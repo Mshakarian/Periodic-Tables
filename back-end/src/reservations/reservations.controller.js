@@ -110,7 +110,7 @@ function statusValidation(req, res, next) {
     return next({
       status: 400,
       message:
-        "Status must be `booked`, `seated` or `finished` or `cancelled`, cannot be `unknown`",
+        "Status must be `booked`, `seated`, `finished`, or `cancelled`. Status cannot be `unknown`",
     });
 }
 

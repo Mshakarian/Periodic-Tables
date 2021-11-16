@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
   listReservations,
-  updateReservationStatus,
   listTables,
   finishTable,
+  updateReservationStatus,
 } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time";
@@ -18,38 +18,35 @@ import useQuery from "../utils/useQuery";
  * @returns {JSX.Element}
  */
 function Dashboard({ date, setDate, tables, setTables }) {
-  const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
   const query = useQuery();
   let queryDate = query.get("date");
 
   if (queryDate){
     setDate(queryDate);
   }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(loadDashboard, [date]);
+  const [reservations, setReservations] = useState([]);
+  const [reservationsError, setReservationsError] = useState(null);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
     Promise.all([
-      listReservations({ date }, abortController.signal),
+      listReservations({date}, abortController.signal),
       listTables(abortController.signal),
     ])
       .then(([reservationData, tableData]) => {
         setReservations(reservationData);
-        console.log("reservationData", reservationData);
-        setTables(
-          tableData.map((table) => ({
-            ...table,
-            status: table.status === null ? "free" : table.status,
-          }))
-        );
+        setTables(tableData);
       })
-      .catch(setReservationsError);
+      .catch(error => {
+        console.error(error);
+        setReservationsError(error);
+      });
     return () => abortController.abort();
   }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(loadDashboard, [date]);
 
   function cancelHandler(reservation_id) {
     if (
@@ -57,7 +54,9 @@ function Dashboard({ date, setDate, tables, setTables }) {
         "Do you want to cancel this reservation? WARNING: THIS CANNOT BE UNDONE"
       )
     ) {
-      updateReservationStatus(reservation_id, CANCELLED)
+      const abortController = new AbortController();
+      console.log("cancel handler date: ", date);
+      updateReservationStatus(reservation_id, CANCELLED, abortController.signal)
         .then(loadDashboard)
         .catch(setReservationsError);
     }
@@ -73,8 +72,12 @@ function Dashboard({ date, setDate, tables, setTables }) {
     }
   }
 
-  const tablesCards = () => {
-    if(tables !== undefined){
+  const tableCards = () => {
+    if(tables === undefined){
+      return (
+        <div>Tables Loading...</div>
+      )
+      }
     return tables
     .sort((a, b) =>
       a.table_name > b.table_name ? 1 : b.table_name > a.table_name ? -1 : 0
@@ -86,8 +89,8 @@ function Dashboard({ date, setDate, tables, setTables }) {
         <div className="col-lg-4 col-xl-3 m-3 card table-card text-black" key={table.table_id} >
           <h5 className="table-card-title">Table: {table.table_name}</h5>
           <div>
-            <h5 data-table-id-status={table.table_id}> Status: 
-             {table.reservation_id ? " occupied" : " free"}
+            <h5 data-table-id-status={table.table_id}>Status:{" "}
+             {table.status}
             </h5>
             <h5>Table Capacity: {table.capacity}</h5>
             {table.reservation_id ? (
@@ -107,14 +110,13 @@ function Dashboard({ date, setDate, tables, setTables }) {
           ) : null}
           </div>
       )
-    })}};
+    })
+  };
 
   return (
     <main>
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">{`Reservations for ${date}`}</h4>
-      </div>
+      <ErrorAlert error={reservationsError} />
       <div className="btn-group" role="group" aria-label="Basic example">
         <button
           type="button"
@@ -138,15 +140,16 @@ function Dashboard({ date, setDate, tables, setTables }) {
           Next &gt;
         </button>
       </div>
-      <ErrorAlert error={reservationsError} />
-      {reservations.length > 0 && (
-        <ReservationsList
-          reservations={reservations}
-          cancelHandler={cancelHandler}
-          buttons
-        />
-      )}
-      <div className="row">{tablesCards()}</div>
+      <div className="d-md-flex mb-3">
+        <h3 className="mb-0">{`Reservations for ${date}`}</h3>
+      </div>
+      <ReservationsList
+        date ={date}
+        reservations={reservations}
+        cancelHandler={cancelHandler}
+        buttons
+      />
+      <div className="row">{tableCards()}</div>
     </main>
   );
 }

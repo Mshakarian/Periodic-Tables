@@ -115,7 +115,7 @@ function ReservationCreate({ setDate }) {
 
   return (
     <main>
-      <h1>Create Reservation</h1>
+      <h1 className="text-light">Create Reservation</h1>
       {errorsJSX()}
       <ErrorAlert error={apiError} />
       <ReservationForm 

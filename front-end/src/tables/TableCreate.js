@@ -39,7 +39,7 @@ function TableCreate() {
     }));
   }
   return (
-    <main>
+    <main className="text-light">
       <h1 className="mb-3">Create a new Table</h1>
       <ErrorAlert error={error} />
       <form onSubmit={submitHandler} className="mb-4">
@@ -57,9 +57,6 @@ function TableCreate() {
               onChange={changeHandler}
               required={true}
             />
-            <small className="form-text text-muted">
-              Enter the name of the table.
-            </small>
           </div>
           <div className="col-6">
             <label className="form-label" htmlFor="capacity">
@@ -83,14 +80,13 @@ function TableCreate() {
             className="btn btn-secondary mr-2 mt-2 btn-sm"
             onClick={cancelHandler}
           >
-            Cancel
+            <span className="oi oi-x" />Cancel
           </button>
           <button
             type="submit"
-            style={{ backgroundColor: "#211A1E" }}
-            className="btn btn-primary mt-2 btn-sm"
+            className="btn btn-success mt-2 btn-sm"
           >
-            Submit
+           <span className="oi oi-check" />Submit
           </button>
         </div>
       </form>

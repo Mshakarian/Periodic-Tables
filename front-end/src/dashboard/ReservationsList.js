@@ -4,17 +4,19 @@ import formatReservationDate from "../utils/format-reservation-date";
 import formatReservationTime from "../utils/format-reservation-time";
 import ReservationCard from "./ReservationCard";
 
-function ReservationsList({ reservations, cancelHandler, }) {
+
+function ReservationsList({ reservations }) {
   if (reservations === undefined || reservations.length === 0) {
 
     return (
       <div>
         <br />
-        <h3>No Reservations Found</h3>
+        <h3 className="text-light">No reservations found</h3>
         <br />
       </div>
     );
   }
+
   const reservationsList = reservations
     .sort((a, b) =>
       a.reservation_time > b.reservation_time
@@ -41,8 +43,6 @@ function ReservationsList({ reservations, cancelHandler, }) {
         <ReservationCard
           key={reservation.reservation_id}
           reservation={reservation}
-          cancelHandler={cancelHandler}
-          buttons
         />
       );
     });

@@ -1,4 +1,15 @@
 .side-bar {
-  background-color: #393a44;
+  background-color: #8F6593;
   min-width: 200px;
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+  text-align: center;
+  background-color: #cdcdcd;
+}
+
+.main{
+  background-color: #3b252c;
 }

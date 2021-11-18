@@ -1,7 +1,7 @@
 export default function ReservationForm({reservation,changeHandler,cancelHandler,submitHandler}) {
     return (
       <form onSubmit={submitHandler} className="mb-4" id="createForm">
-        <div className="mb-3">
+        <div className="mb-3 text-light">
           <div className="col-6 form-group">
             <label htmlFor="first_name">First Name</label>
             <input
@@ -87,11 +87,11 @@ export default function ReservationForm({reservation,changeHandler,cancelHandler
             className="btn btn-secondary mr-2"
             onClick={cancelHandler}
           >
-            <span className="oi o-x" /> Cancel
+            <span className="oi oi-x" /> Cancel
           </button>
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-success"
             onClick={submitHandler}
           >
             <span className="oi oi-check" /> Submit

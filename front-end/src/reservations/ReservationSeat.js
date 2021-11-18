@@ -14,10 +14,6 @@ function ReservationSeat() {
   const history = useHistory();
   let { reservation_id } = useParams();
   reservation_id = Number(reservation_id);
-  console.log(
-    "🚀 ~ file: ReservationSeat.js ~ line 16 ~ ReservationSeat ~ reservation_id",
-    reservation_id
-  );
 
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(tables[0]);
@@ -39,9 +35,7 @@ function ReservationSeat() {
     const abortController = new AbortController();
     setTablesError(null);
     listTables(abortController.signal)
-      .then((data) => {
-        setTables(data);
-      })
+      .then(setTables)
       .catch(setTablesError);
     return () => abortController.abort();
   }
@@ -58,7 +52,7 @@ function ReservationSeat() {
   }
 
   function cancelHandler() {
-    history.push("/");
+    history.goBack();
   }
 
   function changeHandler({ target: { name, value } }) {
@@ -69,9 +63,9 @@ function ReservationSeat() {
   function submitHandler(event) {
     event.preventDefault();
     const abortController = new AbortController();
-    seatReservation(reservation_id, selectedTable,abortController.signal)
-      .then(updateReservationStatus(reservation_id, SEATED,abortController.signal))
-      .then(() => history.push(`/dashboard?date=${reservation.reservation_date}`)).catch(setTablesError);
+    seatReservation(reservation_id, selectedTable, abortController.signal)
+      .then(updateReservationStatus(reservation_id, SEATED, abortController.signal))
+      .then(() => history.push("/dashboard"));
   }
 
   const tablesOptions = tables.map((table) => {

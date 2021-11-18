@@ -29,11 +29,11 @@ function Search() {
 
   return (
     <main>
-      <h1 className="mb-3">Find a reservation</h1>
+      <h1 className="mb-3 text-light">Find a reservation</h1>
       <ErrorAlert error={reservationsError} />
       <form onSubmit={submitHandler} className="mb-4">
         <div className="row mb-3">
-          <div className="col-6 form-group">
+          <div className="col-6 form-group text-light">
             <label className="form-label" htmlFor="mobile_number">
               Mobile Number
             </label>
@@ -51,10 +51,9 @@ function Search() {
         </div>
         <button
           type="submit"
-          style={{ backgroundColor: "#211A1E" }}
           className="btn btn-primary btn-sm"
         >
-          Find
+          <span className="oi oi-magnifying-glass" /> Search
         </button>
       </form>
         <ReservationsList reservations={reservations} />

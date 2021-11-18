@@ -18,19 +18,17 @@ function bodyHasResId(req, res, next) {
 }
 
 async function tableExists(req, res, next) {
-  let { table_id } = req.params;
-  table_id = Number(table_id);
+  const { table_id } = req.params;
   const table = await service.read(table_id);
   if (table) {
     res.locals.table = table;
     return next();
   }
-  next({ status: 404, message: `Table ${table_id} does not exist` });
+  next({ status: 404, message: `table_id ${table_id} not found.` });
 }
 
 async function resExists(req, res, next) {
-  let { reservation_id } = req.body.data;
-  reservation_id = Number(reservation_id);
+  const { reservation_id } = req.body.data;
   const reservation = await reservationService.readReservation(reservation_id);  
   if (reservation) {
     res.locals.reservation = reservation;
@@ -38,7 +36,7 @@ async function resExists(req, res, next) {
   }
   next({
     status: 404,
-    message: `Reservation ${reservation_id} does not exist`,
+    message: `reservation_id ${reservation_id} not found.`,
   });
 }
 
@@ -65,7 +63,7 @@ function tableHasCapacity(req, res, next) {
 function partyFitsTable(req, res, next) {
   let { people } = res.locals.reservation;
   let { capacity } = res.locals.table;  
-  if (Number(people) > Number(capacity))
+  if (people > capacity)
     return next({
       status: 400,
       message: "Table capacity is too small to fit this reservation size",
@@ -91,12 +89,12 @@ async function tableIsUnoccupied(req, res, next) {
 }
 
 function reservationSeatedAlready(req, res, next) {
-  const { reservation } = res.locals;
-  if (reservation.status === SEATED)
+  const { status } = res.locals.reservation;
+  if (status === SEATED)
     return next({
       status: 400,
       message:
-        "This party is already seated at a different table, please select a different reservation.",
+        "This reservation is already seated.",
     });
   next();
 }
@@ -116,14 +114,15 @@ async function list(req, res) {
 async function updateTable(req, res, next) {
   const { table_id } = req.params;
   const { reservation_id } = req.body.data;
-  const data = await service.update(reservation_id, table_id);
+  const data = await service.update(table_id, reservation_id);
   res.json({ data });
 }
 
 async function finishTable(req, res, next) {
-  const { table_id, reservation_id } = res.locals.table;
-  const data = await service.finishTable(reservation_id, table_id);
-  res.status(200).json({ data });
+  const { table_id } = req.params;
+  const { reservation_id } = res.locals.table;
+  const reservation = await service.finish(table_id, reservation_id);
+  res.json({ data: reservation });
 }
 
 module.exports = {

@@ -64,12 +64,14 @@ function ReservationSeat() {
     event.preventDefault();
     const abortController = new AbortController();
     seatReservation(reservation_id, selectedTable, abortController.signal)
+      .catch(setTablesError)
       .then(updateReservationStatus(reservation_id, SEATED, abortController.signal))
-      .then(() => history.push("/dashboard"));
+      .then(() => history.push("/dashboard"))
+      .catch(setReservationError);
   }
 
   const tablesOptions = tables.map((table) => {
-    if (table.status !== OCCUPIED) {
+    if (table.status !== OCCUPIED && table.capacity > reservation.people) {
       return (
         <option value={table.table_id} key={table.table_id}>
           {table.table_name} - {table.capacity}

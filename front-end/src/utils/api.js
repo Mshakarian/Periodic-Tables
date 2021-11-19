@@ -97,12 +97,14 @@ export async function readReservation(reservation_id, signal) {
 
 export async function updateReservationStatus(reservation_id, status, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+  console.log("api", url)
   const options = {
     method: "PUT",
     body: JSON.stringify({ data: { status } }),
     headers,
     signal,
   };
+  console.log("body", options.body);
   return await fetchJson(url, options);
 }
 

@@ -17,13 +17,14 @@ function ReservationCard({reservation}) {
   
   const history = useHistory();
 
-  function cancelHandler(reservation_id) {
+  function cancelHandler() {
     if (
      window.confirm(
         "Do you want to cancel this reservation? WARNING: THIS CANNOT BE UNDONE"
       )
      ) {
        const abortController = new AbortController();
+
         updateReservationStatus(reservation_id, CANCELLED, abortController.signal)
          .then(()=> history.push("/"));
       }
@@ -47,6 +48,7 @@ function ReservationCard({reservation}) {
             type="button"
             className="btn btn-danger mr-1 mb-2 btn-sm text-dark"
             data-reservation-id-cancel={reservation_id}
+            id={reservation_id}
             onClick={cancelHandler}
           >
             Cancel

@@ -153,7 +153,8 @@ function readReservation(req, res) {
 
 async function updateReservation(req, res) {
   let { reservation_id } = req.params;
-  reservation_id = Number(reservation_id);
+  console.log("reservations controller ", typeof reservation_id);
+ // reservation_id = Number(reservation_id);
   const updatedReservation = { ...req.body.data };
   const data = await service.update(updatedReservation, reservation_id);
   res.status(200).json({ data });

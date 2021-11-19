@@ -35,7 +35,7 @@ function readReservation(reservation_id) {
 }
 
 function update(updatedReservation, reservation_id) {
-  reservation_id = Number(reservation_id);
+  //reservation_id = Number(reservation_id);
   return knex(tableName)
     .where({ reservation_id })
     .update({ ...updatedReservation })
@@ -44,8 +44,9 @@ function update(updatedReservation, reservation_id) {
 }
 
 function updateReservationStatus(status, reservation_id) {
+  console.log("reservations service", typeof reservation_id)
   return knex(tableName)
-    .where({ reservation_id })
+    .where({ reservation_id: reservation_id })
     .update({ status: status })
     .returning("*")
     .then((result) => result[0]);

@@ -31,7 +31,7 @@ function ReservationCard({reservation}) {
     };
 
   return (
-    <div className="col-lg-4 col-xl-3 m-3 card text-dark">
+    <div className="mx-auto col-lg-4 col-xl-3 m-3 card text-dark">
       <h3>{reservation_date}</h3>
       <h4>
         {" "}

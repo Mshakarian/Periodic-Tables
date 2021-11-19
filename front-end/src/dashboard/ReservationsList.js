@@ -47,7 +47,7 @@ function ReservationsList({ reservations }) {
       );
     });
 
-  return <div className="row res-card-container">{reservationsList}</div>;
+  return <div className="mx-auto row justify-content-around">{reservationsList}</div>;
 }
 
 export default ReservationsList;

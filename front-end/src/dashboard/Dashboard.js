@@ -87,7 +87,7 @@ function Dashboard({ date, setDate, tables, setTables }) {
           Next &gt;
         </button>
       </div>
-      <div className="d-md-flex mb-3">
+      <div className="mx-auto mb-3">
         <h3 className="mb-0 text-light">{`Reservations for ${date}`}</h3>
       </div>
       <ReservationsList
@@ -95,7 +95,7 @@ function Dashboard({ date, setDate, tables, setTables }) {
         reservations={reservations}
         buttons
       />
-      <div className="d-md-flex mb-3">
+      <div className="mx-auto mb-3">
         <h3 className="mb-0 text-light">Tables</h3>
       </div>
 

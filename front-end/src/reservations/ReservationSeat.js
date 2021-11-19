@@ -84,14 +84,14 @@ function ReservationSeat() {
 
   return (
     <main>
-      <h1 className="mb-3">Seat Reservation</h1>
-      <ErrorAlert error={reservationError} />
-      <ErrorAlert error={tablesError} />
-      <ReservationCard reservation={reservation} />
-      <form onSubmit={submitHandler} className="mb-4">
-        <div className="row mb-3">
-          <div className="col-6 form-group">
-            <label className="form-label" htmlFor="table_id">
+      <h1 className="text-light mb-3">Seat Reservation</h1>
+        <ErrorAlert error={reservationError} />
+        <ErrorAlert error={tablesError} />
+        <ReservationCard reservation={reservation} />
+      <form onSubmit={submitHandler} className=" mb-4">
+        <div className=" row mb-3">
+          <div className="mx-auto col-6 form-group">
+            <label className="form-label text-light" htmlFor="table_id">
               Select a table
             </label>
             <select

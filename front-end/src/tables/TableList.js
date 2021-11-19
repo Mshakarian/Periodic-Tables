@@ -53,6 +53,6 @@ function TableList({tables, reservations}){
           </div>
       )
     });
-    return <div className="row">{tableCards}</div>
+    return <div className="mx-auto row justify-content-around">{tableCards}</div>
   };
   export default TableList;

@@ -95,6 +95,10 @@ function Dashboard({ date, setDate, tables, setTables }) {
         reservations={reservations}
         buttons
       />
+      <div className="d-md-flex mb-3">
+        <h3 className="mb-0 text-light">Tables</h3>
+      </div>
+
       <TableList
         tables={tables}
         reservations={reservations}

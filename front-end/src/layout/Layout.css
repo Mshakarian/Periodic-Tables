@@ -1,3 +1,9 @@
+* { padding: 0; margin: 0; }
+
+body > * {
+  flex-shrink: 0;
+}
+
 .side-bar {
   background-color: #8F6593;
   min-width: 200px;
@@ -10,6 +16,14 @@
   background-color: #cdcdcd;
 }
 
+main{
+  text-align: center;
+}
+
 .main{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
   background-color: #3b252c;
 }

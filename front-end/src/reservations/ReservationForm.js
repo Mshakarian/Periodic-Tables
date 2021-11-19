@@ -2,7 +2,7 @@ export default function ReservationForm({reservation,changeHandler,cancelHandler
     return (
       <form onSubmit={submitHandler} className="mb-4" id="createForm">
         <div className="mb-3 text-light">
-          <div className="col-6 form-group">
+          <div className="mx-auto col-6 form-group">
             <label htmlFor="first_name">First Name</label>
             <input
               type="text"
@@ -15,7 +15,7 @@ export default function ReservationForm({reservation,changeHandler,cancelHandler
               onChange={changeHandler}
             />
           </div>
-          <div className="col-6 form-group">
+          <div className="mx-auto col-6 form-group">
             <label htmlFor="last_name">Last Name</label>
             <input
               type="text"
@@ -28,7 +28,7 @@ export default function ReservationForm({reservation,changeHandler,cancelHandler
               onChange={changeHandler}
             />
           </div>
-          <div className="col-6 form-group">
+          <div className="mx-auto col-6 form-group">
             <label htmlFor="mobile_number">Mobile Number</label>
             <input
               type="tel"
@@ -42,7 +42,7 @@ export default function ReservationForm({reservation,changeHandler,cancelHandler
               onChange={changeHandler}
             />
           </div>
-          <div className="col-6 form-group">
+          <div className="mx-auto col-6 form-group">
             <label htmlFor="reservation_date">Reservation Date</label>
             <input
               type="date"
@@ -55,7 +55,7 @@ export default function ReservationForm({reservation,changeHandler,cancelHandler
               onChange={changeHandler}
             />
           </div>
-          <div className="col-6 form-group">
+          <div className="mx-auto col-6 form-group">
             <label htmlFor="reservation_time">Reservation Time</label>
             <input
               type="time"
@@ -68,7 +68,7 @@ export default function ReservationForm({reservation,changeHandler,cancelHandler
               onChange={changeHandler}
             />
           </div>
-          <div className="col-6 form-group">
+          <div className="mx-auto col-6 form-group">
             <label htmlFor="people">Party Size</label>
             <input
               type="number"

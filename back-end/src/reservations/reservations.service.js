@@ -44,7 +44,6 @@ function update(updatedReservation, reservation_id) {
 }
 
 function updateReservationStatus(status, reservation_id) {
-  console.log("reservations service", typeof reservation_id)
   return knex(tableName)
     .where({ reservation_id: reservation_id })
     .update({ status: status })

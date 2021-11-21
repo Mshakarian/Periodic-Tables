@@ -6,17 +6,16 @@ import {
   updateReservationStatus,
   readReservation,
 } from "../utils/api";
-import { SEATED, OCCUPIED } from "../utils/constants";
+import { SEATED } from "../utils/constants";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationCard from "../dashboard/ReservationCard";
 
 function ReservationSeat() {
   const history = useHistory();
   let { reservation_id } = useParams();
-  reservation_id = Number(reservation_id);
 
   const [tables, setTables] = useState([]);
-  const [selectedTable, setSelectedTable] = useState(tables[0]);
+  const [selectedTable, setSelectedTable] = useState("x");
   const [tablesError, setTablesError] = useState(null);
   const [reservation, setReservation] = useState({
     first_name: "",
@@ -55,23 +54,27 @@ function ReservationSeat() {
     history.goBack();
   }
 
-  function changeHandler({ target: { name, value } }) {
-    console.log("value", value);
+  function changeHandler({ target: { value } }) {
     setSelectedTable(value);
   }
 
   function submitHandler(event) {
     event.preventDefault();
-    const abortController = new AbortController();
-    seatReservation(reservation_id, selectedTable, abortController.signal)
-      .catch(setTablesError)
-      .then(updateReservationStatus(reservation_id, SEATED, abortController.signal))
-      .then(() => history.push("/dashboard"))
-      .catch(setReservationError);
+    if(selectedTable !== "x"){
+      const abortController = new AbortController();
+      seatReservation(reservation_id, parseInt(selectedTable), abortController.signal)
+      .then(response => {
+        if(!response.message){
+          updateReservationStatus(reservation_id, SEATED, abortController.signal)
+          history.push(`/dashboard?date=${reservation.reservation_date}`)
+        }
+      }).catch(setTablesError);
+      return () => abortController.abort();
+    }
   }
 
   const tablesOptions = tables.map((table) => {
-    if (table.status !== OCCUPIED && table.capacity > reservation.people) {
+    if (table.reservation_id === null) {
       return (
         <option value={table.table_id} key={table.table_id}>
           {table.table_name} - {table.capacity}
@@ -101,7 +104,7 @@ function ReservationSeat() {
               onChange={changeHandler}
               required={true}
             >
-              <option>Select a table</option>
+              <option value="x">Select a table</option>
               {tablesOptions}
             </select>
           </div>

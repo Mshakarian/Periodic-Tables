@@ -15,7 +15,8 @@ function TableList({tables, reservations}){
     if(result){
       const tableId = target.id;
       const abortController = new AbortController();
-      finishTable(tableId,abortController.signal).then(()=> history.push("/"));
+      // eslint-disable-next-line no-undef
+      finishTable(tableId,abortController.signal).then(()=> history.push(`/`));
     }
   }
 
@@ -24,6 +25,7 @@ function TableList({tables, reservations}){
       a.table_name > b.table_name ? 1 : b.table_name > a.table_name ? -1 : 0
     )
     .map((table) => {
+
       let tableRes = reservations.find(reservation => reservation.reservation_id === table.reservation_id);
       let partyName = tableRes ? tableRes.last_name : null;      
       return (
@@ -31,7 +33,7 @@ function TableList({tables, reservations}){
           <h5 className="table-card-title">Table: {table.table_name}</h5>
           <div>
             <h5 data-table-id-status={table.table_id}>Status:{" "}
-             {table.status}
+             {table.reservation_id ? "occupied" : "free"}
             </h5>
             <h5>Table Capacity: {table.capacity}</h5>
             {table.reservation_id ? (

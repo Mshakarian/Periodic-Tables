@@ -6,7 +6,7 @@ import ReservationForm from "./ReservationForm";
 
 
 
-function ReservationCreate({ setDate }) {
+function ReservationCreate() {
   const initialState = {
     first_name: "",
     last_name: "",
@@ -33,12 +33,9 @@ function ReservationCreate({ setDate }) {
     event.preventDefault();
     const abortController = new AbortController();
     const foundErrors = [];
-    console.log("reservation", reservation);
-    console.log("reservation json", JSON.stringify({ data: reservation }));
     if (validateDate(foundErrors) && validateFields(foundErrors)) {
       createReservation(reservation, abortController.signal)
-        .then(setDate(reservation.reservation_date))
-        .then(() => history.push(`/`))
+        .then(() => history.push(`/dashboard?date=${reservation.reservation_date}`))
         .catch(setApiError);
     }
     setErrors(foundErrors);
@@ -46,7 +43,7 @@ function ReservationCreate({ setDate }) {
   }
 
   function cancelHandler() {
-    history.push("/dashboard");
+    history.goBack();
   }
 
   /** checks if user has filled out each field in the form */

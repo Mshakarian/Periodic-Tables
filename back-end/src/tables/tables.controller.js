@@ -52,7 +52,7 @@ function tableHasName(req, res, next) {
 
 function tableHasCapacity(req, res, next) {
   const { capacity } = req.body.data;
-  if (capacity && typeof capacity === "number" && Number(capacity) > 0)
+  if (capacity && typeof(capacity) === "number" && capacity > 0)
     return next();
   return next({
     status: 400,

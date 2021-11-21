@@ -8,12 +8,10 @@ function TableCreate() {
 
   const [table, setTable] = useState({
     table_name: "",
-    capacity: null,
-    status: "free",
-    reservation_id: null,
+    capacity: "",
   });
 
-  const [error, setError] = useState(null);
+  const [tableError, setTableError] = useState(null);
 
   function cancelHandler() {
     history.goBack();
@@ -21,18 +19,18 @@ function TableCreate() {
 
   function submitHandler(event) {
     event.preventDefault();
-    if (table.table_name.length >= 2) {
-      createTable(table)
-        .then(() => {
-          history.push("/");
-        })
-        .catch(setError);
-    } else {
-      setError({ message: "Table Name must be at least 2 characters long" });
-    }
+    const abortController = new AbortController();
+    setTableError(null);
+    createTable(table, abortController.signal)
+    .catch(setTableError)
+    .then(history.push("/"));
+    return () => abortController.abort();
   }
 
   function changeHandler({ target: { name, value } }) {
+    if (name === "capacity"){
+      value = Number(value);
+    }
     setTable((previousTable) => ({
       ...previousTable,
       [name]: value,
@@ -41,7 +39,7 @@ function TableCreate() {
   return (
     <main className="text-light">
       <h1 className="mb-3">Create a new Table</h1>
-      <ErrorAlert error={error} />
+      <ErrorAlert error={tableError} />
       <form onSubmit={submitHandler} className="mb-4">
         <div className="row mb-3">
           <div className="col-6 form-group">
@@ -52,8 +50,8 @@ function TableCreate() {
               className="form-control"
               id="table_name"
               name="table_name"
-              type="string"
-              value={table.table_name}
+              type="text"
+              minLength="2"
               onChange={changeHandler}
               required={true}
             />
@@ -68,7 +66,6 @@ function TableCreate() {
               name="capacity"
               type="number"
               min="1"
-              value={table.capacity}
               onChange={changeHandler}
               required={true}
             />

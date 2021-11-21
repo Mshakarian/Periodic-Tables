@@ -26,7 +26,7 @@ function timeDateValidation(req, res, next) {
     return next({
       status: 400,
       message:
-        "This Restaurant is open between 10:30AM & 9:30PM, please select a valid time.",
+        "This Restaurant is open between 10:30AM & 9:30PM, please select a valid reservation_time.",
     });
   } else return next();
 }
@@ -152,7 +152,7 @@ function readReservation(req, res) {
 }
 
 async function updateReservation(req, res) {
-  let { reservation_id } = req.params;
+  let { reservation_id } = res.locals.reservation;
   const updatedReservation = { ...req.body.data };
   const data = await service.update(updatedReservation, reservation_id);
   res.status(200).json({ data });
@@ -160,8 +160,11 @@ async function updateReservation(req, res) {
 
 async function updateStatus(req, res) {
   const { reservation_id } = req.params;
-  const { status } = req.body.data;
-  const data = await service.updateReservationStatus(status, reservation_id);
+  const updatedReservation = {
+    ...req.body.data,
+    reservation_id,
+  };
+  const data = await service.updateReservationStatus(updatedReservation);
   res.status(200).json({ data });
 }
 

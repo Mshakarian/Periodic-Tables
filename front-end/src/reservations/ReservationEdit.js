@@ -38,10 +38,12 @@ function ReservationEdit() {
 
   function submitHandler(event) {
     event.preventDefault();
-    updateReservation(reservation).then(() => setReservation(reservation));
-    history.push("/");
-    window.location.reload();
-  }
+    const abortController = new AbortController();
+    updateReservation(reservation, abortController.signal)
+    .then(() => history.push(`/dashboard?date=${reservation.reservation_date}`))
+    .catch(setReservationError);
+    return () => abortController.abort();
+  };
 
   function cancelHandler() {
     history.push("/");
@@ -53,6 +55,7 @@ function ReservationEdit() {
       submitHandler={submitHandler}
       cancelHandler={cancelHandler}
       changeHandler={changeHandler}
+      key={reservation.reservation_id}
     />
   ) : (
     <p>Loading...</p>

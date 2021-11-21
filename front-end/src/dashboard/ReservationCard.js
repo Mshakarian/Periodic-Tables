@@ -41,7 +41,7 @@ function ReservationCard({reservation}) {
       <h5>Time: {reservation_time}</h5>
       <h5>Party Size: {people}</h5>
       <br />
-      <h5>Status: {status} </h5>
+      <h5 data-reservation-id-status={reservation.reservation_id}>Status: {status} </h5>
       {status === BOOKED ? (
         <div>
           <button
